@@ -1,0 +1,6 @@
+debug: true
+practicum:
+  kafka:
+    producer:
+      enabled: true
+      bootstrap-servers: ${KAFKA_SERVER:localhost:9092}

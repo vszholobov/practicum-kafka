@@ -1,23 +1,27 @@
 package practicum.example;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 public class Controller {
     private final KafkaProducer<String, String> kafkaProducer;
 
-    public Controller(KafkaProducer<String, String> kafkaProducer) {
-        this.kafkaProducer = kafkaProducer;
-    }
-
     @GetMapping
-    public ResponseEntity<?> testKafka() {
-        System.out.println("231dda");
-        kafkaProducer.send(new ProducerRecord<>("my-topic", "123124123"));
+    public ResponseEntity<String> testKafka(
+            @RequestParam("topic") String topic,
+            @RequestParam("message") String message
+    ) {
+        log.info("Sending message to topic");
+        kafkaProducer.send(new ProducerRecord<>(topic, message));
         return ResponseEntity.ok("sent");
     }
 }
